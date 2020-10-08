@@ -498,9 +498,6 @@ function ProcSDKReady() {
     logoutcb: null
   }
   zoomauth = zoomsdk.GetAuth(options);
-  console.log("===sdk_key===")
-  console.log(sdk.key)
-  console.log("======")
   functionObj["sdkLogin"](
     sdk.key,
     sdk.secret
