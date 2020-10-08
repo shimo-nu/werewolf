@@ -6,6 +6,8 @@ const os = require('os');
 const platform = os.platform();
 const arch = os.arch();
 
+var sdk = require('./config')
+
 const initoptions = {
   apicallretcb: apicallresultcb,
   ostype: ZOOM_TYPE_OS_TYPE.WIN_OS,
@@ -489,13 +491,20 @@ function showStartJoinWindow() {
 }
 
 function ProcSDKReady() {
-  showAuthwindow()
+  // showAuthwindow()
   var options = {
     authcb: sdkauthCB,
     logincb: loginretCB,
     logoutcb: null
   }
   zoomauth = zoomsdk.GetAuth(options);
+  console.log("===sdk_key===")
+  console.log(sdk.key)
+  console.log("======")
+  functionObj["sdkLogin"](
+    sdk.key,
+    sdk.secret
+  )
 }
 
 function apicallresultcb(apiname, ret) {
@@ -658,6 +667,12 @@ let functionObj = {
   authWithJwtToken: function (sdk_context) {
     let ret = zoomauth.AuthWithJwtToken(sdk_context);
     console.log('AuthWithJwtToken', ret);
+    if (ret == 0) {
+      showWaitingWindow();
+    }
+  },
+  sdkLogin: function (key, secret) {
+    let ret = zoomauth.SDKAuth(key, secret);
     if (ret == 0) {
       showWaitingWindow();
     }
@@ -2629,7 +2644,11 @@ app.on('window-all-closed', function () {
 
 function createWindow() {
   // Create the browser window.
-  showDomainwindow();
+  // showDomainwindow();
+  functionObj["setDomain"] (
+    "https://www.zoom.us",
+    true
+  );
 }
 
 app.on('ready', createWindow)
